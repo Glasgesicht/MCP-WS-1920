@@ -50,3 +50,14 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+GccApplication/GccApplication/*
+GccApplication/GccApplication1/*
+GccApplication/GccApplication2/*
+GccApplication/GccApplication3/*
+GccApplication/GccApplication4/*
+GccApplication/GccApplication4/*
+GccApplication/GccBoardProject1/*
+GccApplication/BlinkyRuptyIrgendwas/*
+GccApplication/Blinkylauf_rupty/*
+GccApplication/BaudyLight1/*
+
