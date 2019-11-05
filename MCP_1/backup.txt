@@ -1,0 +1,139 @@
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include "uart_atmega168a.h"
+
+
+volatile int8_t iLEDcnt;	// Zaehler bzw Bit, das auf 1 zu setzen ist
+volatile int8_t vz;			// Vorzeichen
+
+#define F_CPU 3686400UL
+#include <util/delay.h>
+#define BAUD 9600UL
+#define MYUBBR F_CPU/16/BAUD-1
+
+
+volatile int cntr;
+volatile int cntr_O;
+
+volatile int cntr2;
+volatile int cntr2_O;
+
+volatile int start;
+volatile int stop;
+
+volatile int rdz;
+
+volatile uint8_t uart_rx_flag=0;            // Flag
+
+void countdown(int i){
+
+	printf("Das Rennen Startet in...");
+	for(;i>0;i--){
+	printf("\n\t...%i",i);
+		_delay_ms(1000);}
+	printf("\n\tL O S !\n");
+}
+
+int rundenzahl(){
+	int iin;
+	back:
+	printf("\nGeben sie die Rundenzahl ein:");
+	scanf("%i",&iin);
+	printf("\nEin Rennen geht %i Runden!\n",iin);
+	
+	if(iin < 1){
+	printf("ungueltige Eingabe!");
+	goto back;}
+	
+	return iin;
+}
+
+void wartestart(){
+	printf("\nDruecke 's', um das Rennen zu Starten!\nDruecke 'c', um das laufende Rennen abzubrechen!\n\n");
+	while(!start){}
+}
+
+void setup(){
+	start = 1;
+	stop = 1;
+}
+
+
+
+
+int main(void)
+{
+	EICRA |= (1 << ISC01)|(1 << ISC00);
+	EICRA |= (1 << ISC10)|(1 << ISC11);
+
+	USART_Init(MYUBBR);
+	EIMSK |= (1<<INTF0)|(1<<INTF1);
+	
+	sei();									// turn on interrupts (set global I-bit Flag)
+	
+	
+	main:
+	setup();
+	rdz = cntr = cntr2 = cntr_O = cntr2_O = rundenzahl()+1;		// Zähler mit Rundenzahl initiallisieren
+	wartestart();
+	countdown(5); //Countdown zum Start des Rennens
+	/* Replace with your application code */
+	while (!stop)
+	{
+		if (cntr==cntr_O-1)
+		{
+			cntr_O=cntr;
+			if (cntr==0)
+			{
+				printf("Spur 1 - Rennen beendet\n");
+				goto main;
+			}else if (cntr < (rdz-1)){printf("Spieler 1 noch: %i Runden\n",cntr);}
+			else{printf("Spur 1 - Rennen gestartet");}
+		}
+		if (cntr2==cntr2_O-1)
+		{
+			cntr2_O=cntr2;
+			if (cntr2==0)
+			{
+				printf("Spur 2 - Rennen beendet\n");
+				goto main;
+			}else if (cntr2 < (rdz-1)){printf("Spieler 2 noch: %i Runden\n",cntr2);}
+			else{printf("Spur 2 - Rennen gestartet");}
+		}
+		
+	}
+	goto main;
+}
+
+
+ISR (INT0_vect)
+{
+	cntr = cntr_O-1;
+}
+
+
+ISR (INT1_vect)
+{
+	cntr2 = cntr2_O-1;
+}
+
+ISR(TIMER0_OVF_vect)
+{
+	/* Interrupt Code */
+}
+
+ISR(USART_RX_vect) {
+	
+	char data = UDR0
+	// Daten auslesen, dadurch wird das Interruptflag gelöscht
+	//data = uart_getchar(); //refractor, pls
+	switch (data){
+		case 'c':
+		stop = 0;
+		break;
+		case 's':
+		start = 0;
+		break;
+	}
+	
+}
