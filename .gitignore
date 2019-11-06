@@ -50,6 +50,9 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+
+#Local Projects and folders that don't need to be shared
 GccApplication/GccApplication/*
 GccApplication/GccApplication1/*
 GccApplication/GccApplication2/*
@@ -60,4 +63,5 @@ GccApplication/GccBoardProject1/*
 GccApplication/BlinkyRuptyIrgendwas/*
 GccApplication/Blinkylauf_rupty/*
 GccApplication/BaudyLight1/*
+GccApplication/Profiles/*
 
