@@ -53,15 +53,14 @@ dkms.conf
 
 
 #Local Projects and folders that don't need to be shared
-GccApplication/GccApplication/
-GccApplication/GccApplication1/
-GccApplication/GccApplication2/
-GccApplication/GccApplication3/
-GccApplication/GccApplication4/
-GccApplication/GccApplication4/
-GccApplication/GccBoardProject1/
-GccApplication/BlinkyRuptyIrgendwas/
-GccApplication/Blinkylauf_rupty/
-GccApplication/BaudyLight1/
-GccApplication/Profiles/
-
+GccApplication/
+GccApplication1/
+GccApplication2/
+GccApplication3/
+GccApplication4/
+GccApplication4/
+GccBoardProject1/
+BlinkyRuptyIrgendwas/
+Blinkylauf_rupty/
+BaudyLight1/
+Profiles/
