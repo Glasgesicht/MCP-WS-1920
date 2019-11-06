@@ -65,11 +65,15 @@ void wartestart(){
 
 int main(void)
 {
-	EICRA |= (1 << ISC01)|(1 << ISC00);
-	EICRA |= (1 << ISC10)|(1 << ISC11);
-
 	USART_Init(MYUBBR);
-	EIMSK |= (1<<INTF0)|(1<<INTF1);
+	
+	//External Interrupt Control Register A 
+	EICRA |= (1 << ISC01)|(1 << ISC00);
+	EICRA |= (1 << ISC10)|(1 << ISC11);		//Configures Interrupts to be triggered on any rising edge
+											//TODO: Test if only enabling ISC11 is sufficient!
+
+	//External Interrupt Mask Register
+	EIMSK |= (1<<INTF0)|(1<<INTF1);			// Turns on INT0 and INT1
 	
 	sei();									// turn on interrupts (set global I-bit Flag)
 	
