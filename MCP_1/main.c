@@ -25,10 +25,7 @@ volatile int cntr2_O;
 
 volatile int rdz;
 
-volatile uint8_t uart_rx_flag=0;            // Flag
-
 void countdown(int i){
-
 	printf("Das Rennen Startet in...");
 	for(;i>0;i--){
 	printf("\n\t...%i",i);
@@ -39,7 +36,7 @@ void countdown(int i){
 int rundenzahl(){
 	char iin[100] = ""; //expected no more than 100 characters as input
 	int length, i;
-	
+
 	enternumber: //label for going back after incorrect input
 	printf("\nGeben sie die Rundenzahl ein:");
 
@@ -66,18 +63,16 @@ void wartestart(){
 int main(void)
 {
 	USART_Init(MYUBBR);
-	
+
 	//External Interrupt Control Register A 
 	EICRA |= (1 << ISC01)|(1 << ISC00);
 	EICRA |= (1 << ISC10)|(1 << ISC11);		//Configures Interrupts to be triggered on any rising edge
-											//TODO: Test if only enabling ISC11 is sufficient!
 
 	//External Interrupt Mask Register
 	EIMSK |= (1<<INTF0)|(1<<INTF1);			// Turns on INT0 and INT1
 	
 	sei();									// turn on interrupts (set global I-bit Flag)
-	
-	
+
 	main:
 	rdz = cntr = cntr2 = cntr_O = cntr2_O = rundenzahl()+1;		// initialize counters with numbers of rounds.
 																// +1 since numbers are deducted before any prints.
@@ -108,9 +103,7 @@ int main(void)
 				printf("Spur 2 - Rennen beendet\n");
 				goto main;
 			}else {printf("Spieler 2 noch: %i Runden\n",cntr2);}
-
 		}
-		
 	}
 	//Restart the program when race is aborted
 	goto main;
