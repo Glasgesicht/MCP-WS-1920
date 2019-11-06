@@ -8,13 +8,14 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "uart_atmega168a.h"
-#include <stdlib.h>
+#include <stdlib.h> //used for function atoi(const char *__s)
+#include <string.h> //used for function strlen(const char *)
+#include <ctype.h>  //used for function isdigit(int __c)
 
 #define F_CPU 3686400UL
 #include <util/delay.h>
 #define BAUD 9600UL
 #define MYUBBR F_CPU/16/BAUD-1
-
 
 volatile int cntr;
 volatile int cntr_O;
@@ -36,29 +37,30 @@ void countdown(int i){
 }
 
 int rundenzahl(){
-	char iin[100] = "";
+	char iin[100] = ""; //expected no more than 100 characters as input
 	int length, i;
 	
-	back:
+	enternumber: //label for going back after incorrect input
 	printf("\nGeben sie die Rundenzahl ein:");
 
-	scanf("%s",iin);
-	length = strlen(iin);
+	scanf("%s",iin); //input from terminal
+	length = strlen(iin); //length of string entered
 	for(i = 0; i< length;i++){
-	if (!isdigit(iin[i]))
-	{
-		printf("ungueltige Eingabe!");
-		goto back;
-	}}
+		if (!isdigit(iin[i])) //checks if any character input is not a digit
+		{
+			printf("ungueltige Eingabe!");
+			goto enternumber; //forces new, correct input from user
+		}
+	}
 
 	printf("\nEin Rennen geht %i Runden!\n",atoi(iin));
 	
-	return 	atoi(iin);
+	return 	atoi(iin); //array to integer
 }
 
 void wartestart(){
 	printf("\nDruecke 's', um das Rennen zu Starten!\nDruecke 'c', um das laufende Rennen abzubrechen!\n\n");
-	while(UDR0 != 's'){}
+	while(UDR0 != 's'){} //will break when 's' is pressed on the keyboard
 }
 
 int main(void)
@@ -73,22 +75,24 @@ int main(void)
 	
 	
 	main:
-	rdz = cntr = cntr2 = cntr_O = cntr2_O = rundenzahl()+1;		// Zähler mit Rundenzahl initiallisieren
+	rdz = cntr = cntr2 = cntr_O = cntr2_O = rundenzahl()+1;		// initialize counters with numbers of rounds.
+																// +1 since numbers are deducted before any prints.
 	wartestart();
-	countdown(5); //Countdown zum Start des Rennens
-	/* Replace with your application code */
+	countdown(5); //Countdown for race to start. Parameter is length in seconds
+
+	//will break when character 'c' is pressed on the keyboard
 	while (UDR0!='c')
 	{
-		//Ausgelöst durch Interrupt
+		//Caused by interrupt event
 		if (cntr==cntr_O-1)
 		{
 			cntr_O=cntr;
-			//Beim ersten Überfahren der Lichtschranke
-			if (cntr== rdz-1){printf("Spur 1 - Rennen gestartet\n");}
+			if (cntr== rdz-1){printf("Spur 1 - Rennen gestartet\n");}     //Race starts after first passing of the beam sensor
 			if (cntr==0)
 			{
 				printf("Spur 1 - Rennen beendet\n");
-				goto main;
+
+				goto main;				//Will effectively restart the program
 			}else {printf("Spieler 1 noch: %i Runden\n",cntr);}
 		}
 		if (cntr2==cntr2_O-1)
@@ -104,6 +108,7 @@ int main(void)
 		}
 		
 	}
+	//Restart the program when race is aborted
 	goto main;
 }
 
