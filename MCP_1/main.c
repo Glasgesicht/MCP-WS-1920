@@ -45,7 +45,7 @@ int rundenzahl(){
 	for(i = 0; i< length;i++){
 		if (!isdigit(iin[i])) //checks if any character input is not a digit
 		{
-			printf("ungueltige Eingabe!");
+			printf("\nungueltige Eingabe!");
 			goto enternumber; //forces new, correct input from user
 		}
 	}
@@ -66,20 +66,22 @@ int main(void)
 
 	//External Interrupt Control Register A 
 	EICRA |= (1 << ISC01)|(1 << ISC00);
-	EICRA |= (1 << ISC10)|(1 << ISC11);		//Configures Interrupts to be triggered on any rising edge
+	EICRA |= (1 << ISC10)|(1 << ISC11);		// Sets Interrupts to be triggered on any rising edge
 
 	//External Interrupt Mask Register
 	EIMSK |= (1<<INTF0)|(1<<INTF1);			// Turns on INT0 and INT1
 	
-	sei();									// turn on interrupts (set global I-bit Flag)
+	sei();									// Turn on interrupts (set global I-bit Flag)
 
 	main:
-	rdz = cntr = cntr2 = cntr_O = cntr2_O = rundenzahl()+1;		// initialize counters with numbers of rounds.
-																// +1 since numbers are deducted before any prints.
+	rdz = cntr_O = cntr2_O = rundenzahl()+1;		// initialize counters with numbers of rounds.
+													// +1 since numbers are deducted before any prints.
 	wartestart();
 	countdown(5); //Countdown for race to start. Parameter is length in seconds
 
 	//will break when character 'c' is pressed on the keyboard
+	
+	cntr = cntr2 = rdz;
 	while (UDR0!='c')
 	{
 		//Caused by interrupt event
@@ -106,6 +108,8 @@ int main(void)
 		}
 	}
 	//Restart the program when race is aborted
+	
+	printf("Renne abgebochen!\n\n");
 	goto main;
 }
 
