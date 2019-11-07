@@ -25,7 +25,7 @@ volatile int cntr2_O;
 
 volatile int rdz;
 
-void countdown(int i){
+void countdown(int i){ //parameter is countdown in seconds
 	printf("Das Rennen Startet in...");
 	for(;i>0;i--){
 	printf("\n\t...%i",i);
@@ -49,6 +49,12 @@ int rundenzahl(){
 			goto enternumber; //forces new, correct input from user
 		}
 	}
+	
+	if (atoi(iin)<1)
+	{
+		printf("\nungueltige Eingabe!");
+		goto enternumber; //forces new, correct input from user
+	}
 
 	printf("\nEin Rennen geht %i Runden!\n",atoi(iin));
 	
@@ -63,6 +69,13 @@ void wartestart(){
 int main(void)
 {
 	USART_Init(MYUBBR);
+	
+    DDRD &= ~(1 << DDD2);     // Clear the PD2 pin
+	DDRD &= ~(1 << DDD3);     // Clear the PD3 pin
+    // PD2 & PD3 (PCINT0 and PCINT1 pin) are now input
+
+    PORTD |= (1 << PD2)|(1 << PD3);    // turn On the Pull-up
+    // PD2 and PD3 are now input with pull-up enabled
 
 	//External Interrupt Control Register A 
 	EICRA |= (1 << ISC01)|(1 << ISC00);
@@ -72,15 +85,12 @@ int main(void)
 	EIMSK |= (1<<INTF0)|(1<<INTF1);			// Turns on INT0 and INT1
 	
 	sei();									// Turn on interrupts (set global I-bit Flag)
-
 	main:
 	rdz = cntr_O = cntr2_O = rundenzahl()+1;		// initialize counters with numbers of rounds.
 													// +1 since numbers are deducted before any prints.
-	wartestart();
+	wartestart(); //Waits for any 's' as input
 	countdown(5); //Countdown for race to start. Parameter is length in seconds
 
-	//will break when character 'c' is pressed on the keyboard
-	
 	cntr = cntr2 = rdz;
 	while (UDR0!='c')
 	{
@@ -92,7 +102,6 @@ int main(void)
 			if (cntr==0)
 			{
 				printf("Spur 1 - Rennen beendet\n");
-
 				goto main;				//Will effectively restart the program
 			}else {printf("Spieler 1 noch: %i Runden\n",cntr);}
 		}
