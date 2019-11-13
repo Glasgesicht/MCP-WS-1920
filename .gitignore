@@ -77,3 +77,15 @@ Profiles/temp/CurrentSettings-2015-12-17-7.vssettings
 MCP_1/.vs/MCP_1/v14/.atsuo
 *.vssettings
 MCP_1/.vs/MCP_1/v14/.atsuo
+TIMER1/uart_atmega168a.h
+TIMER1/uart_atmega168a.c
+TIMER1/TIMER1.cproj
+TIMER1/TIMER1.componentinfo.xml
+TIMER1/TIMER1.atsln
+TIMER1/main.c
+TIMER1/Debug/TIMER1.srec
+TIMER1/Debug/TIMER1.lss
+TIMER1/Debug/TIMER1.eep
+TIMER1/Debug/Makefile
+TIMER1/Debug/makedep.mk
+TIMER1/.vs/TIMER1/v14/.atsuo
