@@ -1,6 +1,6 @@
 /*
  * MCP_2Ampel.c
- *
+ * Gruppe Phan, Pörling, Scheibner
  * Created: 13.11.2019 15:37:46
  */ 
 
@@ -23,26 +23,23 @@ int main(void)
 	TIMSK1 |= (1<<OCIE1A);
 		
 	// Timer 0 konfigurieren
-	TCCR1B = (1<<WGM12); 
-	TCNT1 = -3600;   // for 1 sec at 36 MHz	
-	TCCR1B = (1<<CS10)|(1<<CS12);
-	
+	TCCR1B = (1<<WGM12);
+	TCNT1 = -3600;   // for 1 sec at PS 1024
+	TCCR1B = (1<<CS10)|(1<<CS12); //PS -> 1024
 	
 	//Richtungsregister PORTC
 	DDRC |= (1<<DDC0)|(1<<DDC1)|(1<<DDC2)|(1<<DDC3)|(1<<DDC4);
-	PORTC = a_gruen; //Autofahrer hat Gruen
-	
-	
+	a_gruen; //Autofahrer hat Gruen
+
     DDRB &= ~(1 << DDB0); // Clear the PB0 pin
     // PB0 are now inputs
 
     PORTB |= (1 << PB0); // turn On the Pull-up
     // PB0 are now inputs with pull-up enabled
-    
+
     PCICR |= (1 << PCIE0);     // set PCIE0 to enable PCMSK0 scan
     PCMSK0 |= (1 << PCINT0);   // set PCINT0 to trigger an interrupt on state change
 
-	
 	// Global Interrupts aktivieren
 	sei();
 	
@@ -55,7 +52,7 @@ int main(void)
 ISR (TIMER1_COMPA_vect)
 {
 	counter++;
-	TCNT1 = -3600;   // for 1 sec at 16 MHz	
+	TCNT1 = -3600;   // for 1 sec // 3686400/1024 = 3600
 	
 	switch(counter){
 	case 14: a_gelb; break;
