@@ -24,7 +24,7 @@ int main(void)
 		
 	// Timer 0 konfigurieren
 	TCCR1B = (1<<WGM12);
-	TCNT1 = -3600;   // for 1 sec at PS 1024
+	TCNT1 = -3600;   // for 1 sec at PS 1024, will internally handled as 61935 (0xF1EF) and count to 65535 (0xFFFF)
 	TCCR1B = (1<<CS10)|(1<<CS12); //PS -> 1024
 	
 	//Richtungsregister PORTC
