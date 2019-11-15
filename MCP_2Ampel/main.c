@@ -6,7 +6,6 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
-
 				            //GR-GYR 
 #define a_gruen		PORTC = (0b01100)
 #define a_gelb		PORTC = (0b01010)
