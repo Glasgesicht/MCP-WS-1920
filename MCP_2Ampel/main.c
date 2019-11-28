@@ -6,13 +6,14 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
-				            //GR-GYR 
-#define a_gruen		PORTC = (0b01100)
-#define a_gelb		PORTC = (0b01010)
-#define a_rot		PORTC = (0b01001)
-#define f_gruen		PORTC = (0b10001)
-#define f_rot		PORTC = (0b01001)
-#define a_gelbrot	PORTC = (0b01011)
+
+				            //GR-GYR - BOGYR
+#define a_gruen		PORTC =  (1<<PINC3)|(1<<PINC2)			  // (0b01100)
+#define a_gelb		PORTC =  (1<<PINC3)|(1<<PINC1)			  // (0b01010)
+#define a_rot		PORTC =  (1<<PINC3)|(1<<PINC0)			  // (0b01001)
+#define f_gruen		PORTC =  (1<<PINC4)|(1<<PINC0)			  // (0b10001)
+#define f_rot		PORTC =  (1<<PINC3)|(1<<PINC0)			  // (0b01001)
+#define a_gelbrot	PORTC =  (1<<PINC3)|(1<<PINC1)|(1<<PINC0) // (0b01011)
 
 volatile uint8_t counter = 0;
 
@@ -52,7 +53,7 @@ ISR (TIMER1_COMPA_vect)
 {
 	counter++;
 	TCNT1 = -3600;   // for 1 sec // 3686400/1024 = 3600
-	
+
 	switch(counter){
 	case 14: a_gelb; break;
 	case 15: a_rot; break;
