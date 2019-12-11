@@ -1,35 +1,32 @@
 
 /*
- * ATmega8_RFM12_Receive_gf.c
- * Version fuer Gruppenfrequenzen
- *
- * Created: 02.10.2011 15:01:10
- *  Author: mf
- *  Updates
- *  21.05.2019 Anpassung auf myAVR MK2, dominic lukwata
- *  06.12.2019 Anpassung fuer Gruppenfrequenzen, dominic lukwata
- */
+* Abgabe Gruppe Scheibner, Pörrling, Phan
+*
+*
+* Created: 02.10.2011 15:01:10
+*  Author: mf
+*  Updates
+*  21.05.2019 Anpassung auf myAVR MK2, dominic lukwata
+*  06.12.2019 Anpassung fuer Gruppenfrequenzen, dominic lukwata
+*
+*  10.12.2019 Erweiterung des Programmes zur Steuerung des Ampelprogrammes
+*  entsprechend dem 3. Übungsblatt
+*
+*/
 
- /********************************************************************
+/********************************************************************
 Beispiel f?r RFM12-Funkmodul (Senden)
 IAR Embedded Workbench IDE, C
 Prozessor: ATMEGA168a
-Frequenz: 434MHz
+Frequenz: 433.05MHz
 Datenrate: 4.8kbps
 
-Diese Programm stellt eine kurze Testroutine f?r den ATMEGA168a in
-Verbindung mit einem externen 3.6864MHz Quarz, einem RFM12-Funkmodul, und
-dem Pollin Electronic Funk-AVR-Evaluations-Board dar.
-Es handelt sich ausdr?cklich um eine Testroutine und ein Anwendungs-
-beispiel. Elementare Elemente wie Fehlerbehandlungen usw. sind nicht
-vorhanden. Das Originalprogramm heisst ATmega8_RFM12_Transmit.c
+Dieses Programm enthält eine Ampelsteuerung und eine Routine zum Empfang von Steuersignalen.
+Über die Steuersignale lässt sich die Ampel in die Modi 'an' und 'aus versetzen'.
 
-Das Funkmodul RFm12 ist auf MyAVRLaborkarte C verbaut.
+Im 'an' Modus verhält sich die Ampel so, wie schon im 2. Übungsblatt.
 
-Ablauf:
-Sendet Preamble, Frame-Recognition, 16 Datenbyte und ChkSumme der
-16 Datenbyte. Anschlie?end erfolgt eine Signalisierung mit LED1.
-Dies geschieht in einer Endlosschleife.
+Empfängt das Programm ein Steuersignal, um in dem Modus 'aus' versetzt zu werden, blinkt das Gelbe Licht der Ampel im Sekundentakt.
 
 Pinbelegung
 -----------------------
@@ -110,7 +107,7 @@ PB0               NINT, VDI
 #include "util/delay.h"		// enthaelt wartezeitroutinen
 #include <avr/interrupt.h>
 
-//GR-GYR - BOGYR
+//GR-GYR - BOGYR  Belegung der Pins zum Ansteuern der Ampel
 #define a_gruen		PORTC =  (1<<PINC3)|(1<<PINC2)			  // (0b01100)
 #define a_gelb		PORTC =  (1<<PINC3)|(1<<PINC1)			  // (0b01010)
 #define a_rot		PORTC =  (1<<PINC3)|(1<<PINC0)			  // (0b01001)
@@ -120,52 +117,52 @@ PB0               NINT, VDI
 
 //Variable, mit der de Ampel an und aus geschaltet wird
 volatile uint8_t ampelan = 1;
-//counter fuer interne Ampelsteuerung
+//Zeitmesser fuer interne Ampelsteuerung
 volatile uint8_t counter = 0;
 
 void RFXX_PORT_INIT(void){
-  HI_SEL();
-  HI_SDI();
-  LOW_SCK();
-  //SET nFFS pin HI when using FIFO
-  HI_DATA();
-  SEL_OUTPUT();
-  SDI_OUTPUT();
-  SDO_INPUT();
-  SCK_OUTPUT();
-  IRQ_IN();
-  DATA_OUT();
+	HI_SEL();
+	HI_SDI();
+	LOW_SCK();
+	//SET nFFS pin HI when using FIFO
+	HI_DATA();
+	SEL_OUTPUT();
+	SDI_OUTPUT();
+	SDO_INPUT();
+	SCK_OUTPUT();
+	IRQ_IN();
+	DATA_OUT();
 }
 
 unsigned int RFXX_WRT_CMD(unsigned int aCmd){
-  unsigned char i;
-  unsigned int temp;
-  temp=0;
-  LOW_SCK();
-  LOW_SEL();
-  
+	unsigned char i;
+	unsigned int temp;
+	temp=0;
+	LOW_SCK();
+	LOW_SEL();
+	
 
-  for(i=0;i<16;i++){
-	  
-  // writing data via serial line to RFM12	  
-    if(aCmd&0x8000){
-      HI_SDI();
-      }else{
-      LOW_SDI();
-    }
-    HI_SCK();
-	
-	// this is for reading incoming data from RFM12 via serial line
-    temp<<=1;
-    if(SDO_HI()){
-      temp|=0x0001;
-    }
-	
-    LOW_SCK();
-    aCmd<<=1;
-  };
-  HI_SEL();
-  return(temp);
+	for(i=0;i<16;i++){
+		
+		// writing data via serial line to RFM12
+		if(aCmd&0x8000){
+			HI_SDI();
+			}else{
+			LOW_SDI();
+		}
+		HI_SCK();
+		
+		// this is for reading incoming data from RFM12 via serial line
+		temp<<=1;
+		if(SDO_HI()){
+			temp|=0x0001;
+		}
+		
+		LOW_SCK();
+		aCmd<<=1;
+	};
+	HI_SEL();
+	return(temp);
 }
 
 
@@ -173,7 +170,7 @@ void RF12_INIT(void){
 	RFXX_WRT_CMD(0x80D7);//EL,EF,11.5pF
 	RFXX_WRT_CMD(0x82D9);//!er,!ebb,ET,ES,EX,!eb,!ew,DC
 
-//	RFXX_WRT_CMD(0xA640);//434MHz
+	//	RFXX_WRT_CMD(0xA640);//434MHz
 	RFXX_WRT_CMD(0xA000| RFM12_FREQUENCY_CALC_433());// Gruppenfrequenz einstellen
 
 	RFXX_WRT_CMD(0xC647);//4.8kbps
@@ -194,86 +191,86 @@ void RF12_INIT(void){
 
 
 unsigned char RF12_RECV(void){
-  unsigned int FIFO_data;
-  WAIT_IRQ_LOW();
-  RFXX_WRT_CMD(0x0000); // read internal status register
-  FIFO_data=RFXX_WRT_CMD(0xB000); // Fifo read command
-  return(FIFO_data&0x00FF);
+	unsigned int FIFO_data;
+	WAIT_IRQ_LOW();
+	RFXX_WRT_CMD(0x0000); // read internal status register
+	FIFO_data=RFXX_WRT_CMD(0xB000); // Fifo read command
+	return(FIFO_data&0x00FF);
 }
 
 int main(void)
 {
-  unsigned char i;
-  unsigned char ChkSum;
-  //POWER ON indication: LED blink 3 times
-  
-  USART_Init ( MYUBRR );
-  MODULE_OUTPUT(); 
-  MODULE_OFF(); //for reset
-  
-  printf ( "Receive ...\n" );
-  
-  MODULE_ON(); //for reset
-  _delay_ms(200);
- 
-  //Initialize command port
-  RFXX_PORT_INIT();
-  //Initialize RF12 chip
-  RF12_INIT();
-  //Init FIFO
-  RFXX_WRT_CMD(0xCA81);
-  
-  
-  	// Timer Interrupt Mask Register
-  	// Overflow Interrupt erlauben
-  	TIMSK1 |= (1<<OCIE1A);
-  	TCCR1B = (1<<WGM12);
-	  
-  	// Entspricht einer Sekunde bis Overflow bei Prescaler 1024
-  	TCNT1 = -3600;
-  	TCCR1B = (1<<CS10)|(1<<CS12); // Setze Prescaler für Timer auf 1024
-  	
-  	//Richtungsregister PORTC
-  	DDRC |= (1<<DDC0)|(1<<DDC1)|(1<<DDC2)|(1<<DDC3)|(1<<DDC4);
-  	a_gruen; //Autofahrer hat zu Begin Gruen
+	unsigned char i;
+	unsigned char ChkSum;
+	//POWER ON indication: LED blink 3 times
 	
-	/* Konfiguriere Taster */	  
+	USART_Init ( MYUBRR );
+	MODULE_OUTPUT();
+	MODULE_OFF(); //for reset
+	
+	printf ( "Receive ...\n" );
+	
+	MODULE_ON(); //for reset
+	_delay_ms(200);
+	
+	//Initialize command port
+	RFXX_PORT_INIT();
+	//Initialize RF12 chip
+	RF12_INIT();
+	//Init FIFO
+	RFXX_WRT_CMD(0xCA81);
+	
+	
+	// Timer Interrupt Mask Register
+	// Overflow Interrupt erlauben
+	TIMSK1 |= (1<<OCIE1A);
+	TCCR1B = (1<<WGM12);
+	
+	// Entspricht einer Sekunde bis Overflow bei Prescaler 1024
+	TCNT1 = -3600;
+	TCCR1B = (1<<CS10)|(1<<CS12); // Setze Prescaler für Timer auf 1024
+	
+	//Richtungsregister PORTC
+	DDRC |= (1<<DDC0)|(1<<DDC1)|(1<<DDC2)|(1<<DDC3)|(1<<DDC4);
+	a_gruen; //Autofahrer hat zu Begin Gruen
+	
+	/* Konfiguriere Taster */
 
-    DDRD  &= ~(1 << DDD2);     // Lösche Belegung von PD2
-    PORTD |=  (1 << PD2);      // turn On the Pull-up
+	DDRD  &= ~(1 << DDD2);     // Lösche Belegung von PD2
+	PORTD |=  (1 << PD2);      // turn On the Pull-up
 	
-    // Pin Change Interrupt Control Register
-    PCICR |= (1 << PCIE2);     // Setze PCIE2 um PCMSK2 Scan zu aktivieren
+	// Pin Change Interrupt Control Register
+	PCICR |= (1 << PCIE2);     // Setze PCIE2 um PCMSK2 Scan zu aktivieren
 	
 	// Pin Change Mask Register 2
 	PCMSK2 = (1 << PCINT18);   //Aktiviere Interrupt auf PCINT18 (PIND2)
-    
-  	// Global Interrupts aktivieren
-  	sei();
-	 
+	
+	// Global Interrupts aktivieren
+	sei();
+	
 
-  while(1){
-	  
-    //Enable FIFO
-    RFXX_WRT_CMD(0xCA83);
-    
-	ChkSum=0;
-    //Receive payload data
-    for(i=0;i<16;i++){		
-      ChkSum+=RF12_RECV();
-    }
-    //Receive Check sum
-    i=RF12_RECV();
-    
-	//Disable FIFO
-    RFXX_WRT_CMD(0xCA81);
-    	//Package chkeck
-    if(ChkSum==i){
-      ampelan = i-(0x78);
-      printf( "Data OK\n" );
-      _delay_ms(10);
-    }
-  }
+	while(1){
+		
+		//Enable FIFO
+		RFXX_WRT_CMD(0xCA83);
+		
+		ChkSum=0;
+		//Receive payload data
+		for(i=0;i<16;i++){
+			ChkSum+=RF12_RECV();
+		}
+		//Receive Check sum
+		i=RF12_RECV();
+		
+		//Disable FIFO
+		RFXX_WRT_CMD(0xCA81);
+		//Package chkeck
+		if(ChkSum==i){
+			ampelan = i-(0x78);
+			printf( "Data OK\n" );
+			_delay_ms(10);
+		}
+	}
 }
 
 ISR (TIMER1_COMPA_vect)
@@ -282,21 +279,24 @@ ISR (TIMER1_COMPA_vect)
 	
 	if (ampelan)
 	{
-	counter++;
-	switch(counter){
-		case 14: a_gelb; break;
-		case 15: a_rot; break;
-		case 16: f_gruen; break;
-		case 21: f_rot; break;
-		case 26: a_gelbrot; break;
-		case 27: a_gruen; counter=0;
-	}
-	} else {
+		counter++;
+		switch(counter){
+			case 14: a_gelb; break;
+			case 15: a_rot; break;
+			case 16: f_gruen; break;
+			case 21: f_rot; break;
+			case 26: a_gelbrot; break;
+			case 27: a_gruen; counter=0;
+		}
+		} else {
 		PORTC &= (0b00010); // Deaktiviere alle Lampen, bis auf die Gelbe
 		PORTC ^= (0b00010); // XOR auf der Gelben Lampe, damit sie im Sekunden
 	}
 }
 
+/*ISR is Activated on any state change.
+  since this will switch the variable counter to a state in which the if-condition is not being met anymore,
+  an actual de-bounce is not required here.*/
 ISR(PCINT2_vect) {
 	if(counter<13||counter>26){
 		counter = 13;

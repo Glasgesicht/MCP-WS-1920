@@ -1,34 +1,29 @@
 /*
- * ATmega8_RFM12_Receive_fg.c
- * Version fuer Gruppenfrequenzen
+ * Abgabe Gruppe Scheibner, Pörrling, Phan
  *
- * Created: 02.10.2011 15:01:10
- *  Author: mf
+ *
+ *  Created: 02.10.2011 15:01:10
+ *  Original Author: mf
  *  Updates
  *  21.05.2019 Anpassung auf myAVR MK2, dominic lukwata
  *  06.12.2019 Anpassung fuer Gruppenfrequenzen, dominic lukwata
+ *
+ *  10.12.2019 Erweiterung des Programmes zur Steuerung des Ampelprogrammes
+ *  entsprechend dem 3. Übungsblatt
+ *
+ *
+ *
  */
 
  /********************************************************************
-Beispiel f?r RFM12-Funkmodul (Senden)
-IAR Embedded Workbench IDE, C
-Prozessor: ATMEGA168a
-Frequenz: 434MHz
-Datenrate: 4.8kbps
+  Prozessor: ATMEGA168a
+  Frequenz: 433.05MHz
+  Datenrate: 4.8kbps
 
-Diese Programm stellt eine kurze Testroutine f?r den ATMEGA168a in
-Verbindung mit einem externen 3.6864MHz Quarz, einem RFM12-Funkmodul, und
-dem Pollin Electronic Funk-AVR-Evaluations-Board dar.
-Es handelt sich ausdr?cklich um eine Testroutine und ein Anwendungs-
-beispiel. Elementare Elemente wie Fehlerbehandlungen usw. sind nicht
-vorhanden. Das Originalprogramm heisst ATmega8_RFM12_Transmit.c
+Dieses Programm lässt den Nutzer über Konsoleneingabe drahtlos, per UHF, eine Ampel deaktivieren, 
+bzw. aktivieren.
 
-Das Funkmodul RFm12 ist auf MyAVRLaborkarte C verbaut.
 
-Ablauf:
-Sendet Preamble, Frame-Recognition, 16 Datenbyte und ChkSumme der
-16 Datenbyte. Anschlie?end erfolgt eine Signalisierung mit LED1.
-Dies geschieht in einer Endlosschleife.
 
 Pinbelegung
 -----------------------
@@ -103,8 +98,6 @@ PB0               NINT, VDI
 #include "uart_atmega168a.h"
 #include "util/delay.h"		// enthaelt wartezeitroutinen
 #include <stdlib.h>
-
-
 
 
 void RFXX_PORT_INIT(void){
@@ -218,17 +211,17 @@ int main(void)
   
   while(1){
 	  
-	char iin[10];
-	int a;
+	char iin[10];  // Array zum Lesen einer Konsoleneingabe
+	int a;         // Variable zur Konvertierung in eine Zahl 
 	printf("gebe '0' oder '1' in die Konsole ein, um die Ampel zu steuern.\n");
-	scanf("%s",iin);
+	scanf("%s",iin);//Lesen der Konsoleneingabe
 	
 	a = atoi(iin); //array to integer
 	
-	if (a==0||a==1)
+	if (a==0||a==1) //Nutzer wird aufgefordert eine 0 oder 1 einzugeben. Abweichende Eingaben werden Ignoriert
 	{
 	
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 10; i++)  //Um sicherzugehen, dass das Signal den Receiver erreicht wird es gleich 10x verschickt
 	{
     LED1_ON();
     RFXX_WRT_CMD(0x0000);//read status register
@@ -252,7 +245,7 @@ int main(void)
     ChkSum+=0x32;
     RF12_SEND(0x33);
     ChkSum+=0x33;
-    RF12_SEND(0x34+a);
+    RF12_SEND(0x34+a); //Steuersignal ist abhängig von eingegebener Variable
     ChkSum+=0x34+a;
     RF12_SEND(0x35);
     ChkSum+=0x35;
@@ -287,7 +280,6 @@ int main(void)
     LED1_OFF();
 	_delay_ms(300);
 	}
-		printf("%X \n",ChkSum);
 		printf ("Steuersignal uebertragen!\n");
 	}
   };
