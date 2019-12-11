@@ -107,6 +107,7 @@ PB0               NINT, VDI
 #include "util/delay.h"		// enthaelt wartezeitroutinen
 #include <avr/interrupt.h>
 
+
 //GR-GYR - BOGYR  Belegung der Pins zum Ansteuern der Ampel
 #define a_gruen		PORTC =  (1<<PINC3)|(1<<PINC2)			  // (0b01100)
 #define a_gelb		PORTC =  (1<<PINC3)|(1<<PINC1)			  // (0b01010)
@@ -119,6 +120,8 @@ PB0               NINT, VDI
 volatile uint8_t ampelan = 1;
 //Zeitmesser fuer interne Ampelsteuerung
 volatile uint8_t counter = 0;
+//ID unserer geliebten Ampel!
+const unsigned char AMPELID = 11;
 
 void RFXX_PORT_INIT(void){
 	HI_SEL();
@@ -202,13 +205,15 @@ int main(void)
 {
 	unsigned char i;
 	unsigned char ChkSum;
+	unsigned char val;
+	unsigned char id;
 	//POWER ON indication: LED blink 3 times
 	
 	USART_Init ( MYUBRR );
 	MODULE_OUTPUT();
 	MODULE_OFF(); //for reset
 	
-	printf ( "Receive ...\n" );
+	printf ( "AMPEL START!\n\n" );
 	
 	MODULE_ON(); //for reset
 	_delay_ms(200);
@@ -236,14 +241,14 @@ int main(void)
 	
 	/* Konfiguriere Taster */
 
-	DDRD  &= ~(1 << DDD2);     // Lösche Belegung von PD2
-	PORTD |=  (1 << PD2);      // turn On the Pull-up
+	DDRD  &= ~(1 << DDD6);     // Lösche Belegung von PD2
+	PORTD |=  (1 << PD6);      // turn On the Pull-up
 	
 	// Pin Change Interrupt Control Register
 	PCICR |= (1 << PCIE2);     // Setze PCIE2 um PCMSK2 Scan zu aktivieren
 	
 	// Pin Change Mask Register 2
-	PCMSK2 = (1 << PCINT18);   //Aktiviere Interrupt auf PCINT18 (PIND2)
+	PCMSK2 = (1 << PCINT22);   //Aktiviere Interrupt auf PCINT18 (PIND2)
 	
 	// Global Interrupts aktivieren
 	sei();
@@ -255,21 +260,30 @@ int main(void)
 		RFXX_WRT_CMD(0xCA83);
 		
 		ChkSum=0;
+		
+		
 		//Receive payload data
-		for(i=0;i<16;i++){
-			ChkSum+=RF12_RECV();
-		}
+		val = RF12_RECV();
+		id = RF12_RECV();
 		//Receive Check sum
 		i=RF12_RECV();
 		
+		ChkSum+= id;
+		ChkSum+= val;
 		//Disable FIFO
 		RFXX_WRT_CMD(0xCA81);
 		//Package chkeck
-		if(ChkSum==i){
-			ampelan = i-(0x78);
-			printf( "Data OK\n" );
+		
+		printf("ID: %i val: %i", id, val);
+		
+		if(ChkSum==i && id == AMPELID && (val==0||val==1)){
+			ampelan = val;
+			printf( " Received Data Package OK, Data Code:%i",val);
 			_delay_ms(10);
+		} else {
+			printf(" Discarded Package");
 		}
+		printf("\n");
 	}
 }
 
@@ -296,8 +310,8 @@ ISR (TIMER1_COMPA_vect)
 }
 
 /*ISR is Activated on any state change.
-  since this will switch the variable counter to a state in which the if-condition is not being met anymore,
-  an actual de-bounce is not required here.*/
+since this will switch the variable counter to a state in which the if-condition is not being met anymore,
+an actual de-bounce is not required here.*/
 ISR(PCINT2_vect) {
 	if(counter<13||counter>26){
 		counter = 13;
