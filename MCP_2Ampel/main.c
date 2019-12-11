@@ -19,17 +19,19 @@ volatile uint8_t counter = 0;
 
 int main(void)
 {
+	// Timer Interrupt Mask Register
 	// Overflow Interrupt erlauben
 	TIMSK1 |= (1<<OCIE1A);
 		
 	// Timer 0 konfigurieren
 	TCCR1B = (1<<WGM12);
-	TCNT1 = -3600;   // for 1 sec at PS 1024, will internally handled as 61935 (0xF1EF) and count to 65535 (0xFFFF)
+	// for 1 sec at PS 1024, will internally handled as 61936 (0xF1EF) and count to  (0xFFFF)
+	OCR1A = 3600-1;   
 	TCCR1B = (1<<CS10)|(1<<CS12); //PS -> 1024
 	
 	//Richtungsregister PORTC
 	DDRC |= (1<<DDC0)|(1<<DDC1)|(1<<DDC2)|(1<<DDC3)|(1<<DDC4);
-	a_gruen; //Autofahrer hat Gruen
+	a_gruen; //Autofahrer hat zu Begin Gruen
 
     DDRB &= ~(1 << DDB0); // Clear the PB0 pin
     // PB0 are now inputs
@@ -52,7 +54,7 @@ int main(void)
 ISR (TIMER1_COMPA_vect)
 {
 	counter++;
-	TCNT1 = -3600;   // for 1 sec // 3686400/1024 = 3600
+	//TCNT1 = 61936;   // for 1 sec // 3686400/1024 = 3600
 
 	switch(counter){
 	case 14: a_gelb; break;

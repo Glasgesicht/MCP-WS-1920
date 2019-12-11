@@ -1,0 +1,590 @@
+
+TESTEmpaenger.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000022  00800100  000002ec  00000380  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         000002ec  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .bss          00000006  00800122  00800122  000003a2  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  000003a2  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000003d4  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000080  00000000  00000000  00000414  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   00000d6e  00000000  00000000  00000494  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 000008d9  00000000  00000000  00001202  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   000005f7  00000000  00000000  00001adb  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  000000d8  00000000  00000000  000020d4  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    00000486  00000000  00000000  000021ac  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    00000366  00000000  00000000  00002632  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000060  00000000  00000000  00002998  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 34 00 	jmp	0x68	; 0x68 <__ctors_end>
+   4:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+   8:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+   c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  10:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  14:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  18:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  1c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  20:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  24:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  28:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  2c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  30:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  34:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  38:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  3c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  40:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  44:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  48:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  4c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  50:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  54:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  58:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  5c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  60:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  64:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+
+00000068 <__ctors_end>:
+  68:	11 24       	eor	r1, r1
+  6a:	1f be       	out	0x3f, r1	; 63
+  6c:	cf ef       	ldi	r28, 0xFF	; 255
+  6e:	d4 e0       	ldi	r29, 0x04	; 4
+  70:	de bf       	out	0x3e, r29	; 62
+  72:	cd bf       	out	0x3d, r28	; 61
+
+00000074 <__do_copy_data>:
+  74:	11 e0       	ldi	r17, 0x01	; 1
+  76:	a0 e0       	ldi	r26, 0x00	; 0
+  78:	b1 e0       	ldi	r27, 0x01	; 1
+  7a:	ec ee       	ldi	r30, 0xEC	; 236
+  7c:	f2 e0       	ldi	r31, 0x02	; 2
+  7e:	02 c0       	rjmp	.+4      	; 0x84 <__do_copy_data+0x10>
+  80:	05 90       	lpm	r0, Z+
+  82:	0d 92       	st	X+, r0
+  84:	a2 32       	cpi	r26, 0x22	; 34
+  86:	b1 07       	cpc	r27, r17
+  88:	d9 f7       	brne	.-10     	; 0x80 <__do_copy_data+0xc>
+
+0000008a <__do_clear_bss>:
+  8a:	21 e0       	ldi	r18, 0x01	; 1
+  8c:	a2 e2       	ldi	r26, 0x22	; 34
+  8e:	b1 e0       	ldi	r27, 0x01	; 1
+  90:	01 c0       	rjmp	.+2      	; 0x94 <.do_clear_bss_start>
+
+00000092 <.do_clear_bss_loop>:
+  92:	1d 92       	st	X+, r1
+
+00000094 <.do_clear_bss_start>:
+  94:	a8 32       	cpi	r26, 0x28	; 40
+  96:	b2 07       	cpc	r27, r18
+  98:	e1 f7       	brne	.-8      	; 0x92 <.do_clear_bss_loop>
+  9a:	0e 94 b5 00 	call	0x16a	; 0x16a <main>
+  9e:	0c 94 74 01 	jmp	0x2e8	; 0x2e8 <_exit>
+
+000000a2 <__bad_interrupt>:
+  a2:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+000000a6 <RFXX_PORT_INIT>:
+#include <avr/io.h>
+#include "uart_atmega168a.h"
+#include "util/delay.h"		// enthaelt wartezeitroutinen
+
+void RFXX_PORT_INIT(void){
+  HI_SEL();
+  a6:	2a 9a       	sbi	0x05, 2	; 5
+  HI_SDI();
+  a8:	2b 9a       	sbi	0x05, 3	; 5
+  LOW_SCK();
+  aa:	2d 98       	cbi	0x05, 5	; 5
+  //SET nFFS pin HI when using FIFO
+  HI_DATA();
+  ac:	5f 9a       	sbi	0x0b, 7	; 11
+  SEL_OUTPUT();
+  ae:	22 9a       	sbi	0x04, 2	; 4
+  SDI_OUTPUT();
+  b0:	23 9a       	sbi	0x04, 3	; 4
+  SDO_INPUT();
+  b2:	24 98       	cbi	0x04, 4	; 4
+  SCK_OUTPUT();
+  b4:	25 9a       	sbi	0x04, 5	; 4
+  IRQ_IN();
+  b6:	52 98       	cbi	0x0a, 2	; 10
+  DATA_OUT();
+  b8:	57 9a       	sbi	0x0a, 7	; 10
+  ba:	08 95       	ret
+
+000000bc <RFXX_WRT_CMD>:
+}
+
+unsigned int RFXX_WRT_CMD(unsigned int aCmd){
+  bc:	ac 01       	movw	r20, r24
+  unsigned char i;
+  unsigned int temp;
+  temp=0;
+  LOW_SCK();
+  be:	2d 98       	cbi	0x05, 5	; 5
+  LOW_SEL();
+  c0:	2a 98       	cbi	0x05, 2	; 5
+  c2:	20 e1       	ldi	r18, 0x10	; 16
+}
+
+unsigned int RFXX_WRT_CMD(unsigned int aCmd){
+  unsigned char i;
+  unsigned int temp;
+  temp=0;
+  c4:	80 e0       	ldi	r24, 0x00	; 0
+  c6:	90 e0       	ldi	r25, 0x00	; 0
+  
+
+  for(i=0;i<16;i++){
+	  
+  // writing data via serial line to RFM12	  
+    if(aCmd&0x8000){
+  c8:	55 23       	and	r21, r21
+  ca:	14 f4       	brge	.+4      	; 0xd0 <RFXX_WRT_CMD+0x14>
+      HI_SDI();
+  cc:	2b 9a       	sbi	0x05, 3	; 5
+  ce:	01 c0       	rjmp	.+2      	; 0xd2 <RFXX_WRT_CMD+0x16>
+      }else{
+      LOW_SDI();
+  d0:	2b 98       	cbi	0x05, 3	; 5
+    }
+    HI_SCK();
+  d2:	2d 9a       	sbi	0x05, 5	; 5
+	
+	// this is for reading incoming data from RFM12 via serial line
+    temp<<=1;
+  d4:	88 0f       	add	r24, r24
+  d6:	99 1f       	adc	r25, r25
+    if(SDO_HI()){
+  d8:	1c 99       	sbic	0x03, 4	; 3
+      temp|=0x0001;
+  da:	81 60       	ori	r24, 0x01	; 1
+    }
+	
+	
+    LOW_SCK();
+  dc:	2d 98       	cbi	0x05, 5	; 5
+    aCmd<<=1;
+  de:	44 0f       	add	r20, r20
+  e0:	55 1f       	adc	r21, r21
+  e2:	21 50       	subi	r18, 0x01	; 1
+  temp=0;
+  LOW_SCK();
+  LOW_SEL();
+  
+
+  for(i=0;i<16;i++){
+  e4:	89 f7       	brne	.-30     	; 0xc8 <RFXX_WRT_CMD+0xc>
+	
+	
+    LOW_SCK();
+    aCmd<<=1;
+  };
+  HI_SEL();
+  e6:	2a 9a       	sbi	0x05, 2	; 5
+  return(temp);
+}
+  e8:	08 95       	ret
+
+000000ea <RF12_INIT>:
+
+// Aenderung fuer mehere Frequenzen
+// lukwata 06.12.2019
+
+void RF12_INIT(void){
+	RFXX_WRT_CMD(0x80D7);//EL,EF,11.5pF
+  ea:	87 ed       	ldi	r24, 0xD7	; 215
+  ec:	90 e8       	ldi	r25, 0x80	; 128
+  ee:	0e 94 5e 00 	call	0xbc	; 0xbc <RFXX_WRT_CMD>
+	RFXX_WRT_CMD(0x82D9);//!er,!ebb,ET,ES,EX,!eb,!ew,DC
+  f2:	89 ed       	ldi	r24, 0xD9	; 217
+  f4:	92 e8       	ldi	r25, 0x82	; 130
+  f6:	0e 94 5e 00 	call	0xbc	; 0xbc <RFXX_WRT_CMD>
+
+//	RFXX_WRT_CMD(0xA640);//434MHz
+	RFXX_WRT_CMD(0xA000| RFM12_FREQUENCY_CALC_433());// Gruppenfrequenz einstellen
+  fa:	83 ec       	ldi	r24, 0xC3	; 195
+  fc:	94 ea       	ldi	r25, 0xA4	; 164
+  fe:	0e 94 5e 00 	call	0xbc	; 0xbc <RFXX_WRT_CMD>
+
+	RFXX_WRT_CMD(0xC647);//4.8kbps
+ 102:	87 e4       	ldi	r24, 0x47	; 71
+ 104:	96 ec       	ldi	r25, 0xC6	; 198
+ 106:	0e 94 5e 00 	call	0xbc	; 0xbc <RFXX_WRT_CMD>
+	
+	// 67kHz Bandbreite pro Frequenz / Seite
+	RFXX_WRT_CMD(0x9000|0x400|0xC0|0x10|0x04);//VDI,FAST,134kHz,0dBm,-103dBm
+ 10a:	84 ed       	ldi	r24, 0xD4	; 212
+ 10c:	94 e9       	ldi	r25, 0x94	; 148
+ 10e:	0e 94 5e 00 	call	0xbc	; 0xbc <RFXX_WRT_CMD>
+	
+	RFXX_WRT_CMD(0x94A0);//VDI,FAST,134kHz,0dBm,-103dBm
+ 112:	80 ea       	ldi	r24, 0xA0	; 160
+ 114:	94 e9       	ldi	r25, 0x94	; 148
+ 116:	0e 94 5e 00 	call	0xbc	; 0xbc <RFXX_WRT_CMD>
+	RFXX_WRT_CMD(0xC2AC);//AL,!ml,DIG,DQD4
+ 11a:	8c ea       	ldi	r24, 0xAC	; 172
+ 11c:	92 ec       	ldi	r25, 0xC2	; 194
+ 11e:	0e 94 5e 00 	call	0xbc	; 0xbc <RFXX_WRT_CMD>
+	RFXX_WRT_CMD(0xCA81);//FIFO8,SYNC,!ff,DR
+ 122:	81 e8       	ldi	r24, 0x81	; 129
+ 124:	9a ec       	ldi	r25, 0xCA	; 202
+ 126:	0e 94 5e 00 	call	0xbc	; 0xbc <RFXX_WRT_CMD>
+	RFXX_WRT_CMD(0xC483);//@PWR,NO RSTRIC,!st,!fi,OE,EN
+ 12a:	83 e8       	ldi	r24, 0x83	; 131
+ 12c:	94 ec       	ldi	r25, 0xC4	; 196
+ 12e:	0e 94 5e 00 	call	0xbc	; 0xbc <RFXX_WRT_CMD>
+	RFXX_WRT_CMD(0x9850);//!mp,9810=30kHz,MAX OUT
+ 132:	80 e5       	ldi	r24, 0x50	; 80
+ 134:	98 e9       	ldi	r25, 0x98	; 152
+ 136:	0e 94 5e 00 	call	0xbc	; 0xbc <RFXX_WRT_CMD>
+	RFXX_WRT_CMD(0xE000);//NOT USE
+ 13a:	80 e0       	ldi	r24, 0x00	; 0
+ 13c:	90 ee       	ldi	r25, 0xE0	; 224
+ 13e:	0e 94 5e 00 	call	0xbc	; 0xbc <RFXX_WRT_CMD>
+	RFXX_WRT_CMD(0xC800);//NOT USE
+ 142:	80 e0       	ldi	r24, 0x00	; 0
+ 144:	98 ec       	ldi	r25, 0xC8	; 200
+ 146:	0e 94 5e 00 	call	0xbc	; 0xbc <RFXX_WRT_CMD>
+	RFXX_WRT_CMD(0xC400);//1.66MHz,2.2V
+ 14a:	80 e0       	ldi	r24, 0x00	; 0
+ 14c:	94 ec       	ldi	r25, 0xC4	; 196
+ 14e:	0e 94 5e 00 	call	0xbc	; 0xbc <RFXX_WRT_CMD>
+ 152:	08 95       	ret
+
+00000154 <RF12_RECV>:
+
+
+
+unsigned char RF12_RECV(void){
+  unsigned int FIFO_data;
+  WAIT_IRQ_LOW();
+ 154:	4a 99       	sbic	0x09, 2	; 9
+ 156:	fe cf       	rjmp	.-4      	; 0x154 <RF12_RECV>
+  RFXX_WRT_CMD(0x0000); // read internal status register
+ 158:	80 e0       	ldi	r24, 0x00	; 0
+ 15a:	90 e0       	ldi	r25, 0x00	; 0
+ 15c:	0e 94 5e 00 	call	0xbc	; 0xbc <RFXX_WRT_CMD>
+  FIFO_data=RFXX_WRT_CMD(0xB000); // Fifo read command
+ 160:	80 e0       	ldi	r24, 0x00	; 0
+ 162:	90 eb       	ldi	r25, 0xB0	; 176
+ 164:	0e 94 5e 00 	call	0xbc	; 0xbc <RFXX_WRT_CMD>
+  return(FIFO_data&0x00FF);
+}
+ 168:	08 95       	ret
+
+0000016a <main>:
+{
+  unsigned char i;
+  unsigned char ChkSum;
+  //POWER ON indication: LED blink 3 times
+  
+  USART_Init ( MYUBRR );
+ 16a:	87 e1       	ldi	r24, 0x17	; 23
+ 16c:	90 e0       	ldi	r25, 0x00	; 0
+ 16e:	0e 94 31 01 	call	0x262	; 0x262 <USART_Init>
+  MODULE_OUTPUT(); 
+ 172:	5c 98       	cbi	0x0b, 4	; 11
+  LED2_OUTPUT();
+ 174:	39 9a       	sbi	0x07, 1	; 7
+  LED2_OFF();
+ 176:	41 98       	cbi	0x08, 1	; 8
+  MODULE_OFF(); //for reset
+ 178:	5c 98       	cbi	0x0b, 4	; 11
+  
+  printf ( "Receive ...\n" );
+ 17a:	8e e0       	ldi	r24, 0x0E	; 14
+ 17c:	91 e0       	ldi	r25, 0x01	; 1
+ 17e:	0e 94 44 01 	call	0x288	; 0x288 <puts>
+ 182:	83 e0       	ldi	r24, 0x03	; 3
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 184:	2f ef       	ldi	r18, 0xFF	; 255
+ 186:	3f e3       	ldi	r19, 0x3F	; 63
+ 188:	92 e0       	ldi	r25, 0x02	; 2
+ 18a:	21 50       	subi	r18, 0x01	; 1
+ 18c:	30 40       	sbci	r19, 0x00	; 0
+ 18e:	90 40       	sbci	r25, 0x00	; 0
+ 190:	e1 f7       	brne	.-8      	; 0x18a <main+0x20>
+ 192:	00 c0       	rjmp	.+0      	; 0x194 <main+0x2a>
+ 194:	00 00       	nop
+  
+  for(i=0;i<3;i++){
+ 	_delay_ms(200);
+    LED2_ON();
+ 196:	41 9a       	sbi	0x08, 1	; 8
+ 198:	2f ef       	ldi	r18, 0xFF	; 255
+ 19a:	3f e3       	ldi	r19, 0x3F	; 63
+ 19c:	92 e0       	ldi	r25, 0x02	; 2
+ 19e:	21 50       	subi	r18, 0x01	; 1
+ 1a0:	30 40       	sbci	r19, 0x00	; 0
+ 1a2:	90 40       	sbci	r25, 0x00	; 0
+ 1a4:	e1 f7       	brne	.-8      	; 0x19e <main+0x34>
+ 1a6:	00 c0       	rjmp	.+0      	; 0x1a8 <main+0x3e>
+ 1a8:	00 00       	nop
+ 	_delay_ms(200);
+    LED2_OFF();
+ 1aa:	41 98       	cbi	0x08, 1	; 8
+ 1ac:	81 50       	subi	r24, 0x01	; 1
+  LED2_OFF();
+  MODULE_OFF(); //for reset
+  
+  printf ( "Receive ...\n" );
+  
+  for(i=0;i<3;i++){
+ 1ae:	51 f7       	brne	.-44     	; 0x184 <main+0x1a>
+ 	_delay_ms(200);
+    LED2_ON();
+ 	_delay_ms(200);
+    LED2_OFF();
+  }
+  LED2_OFF();
+ 1b0:	41 98       	cbi	0x08, 1	; 8
+  MODULE_ON(); //for reset
+ 1b2:	5c 9a       	sbi	0x0b, 4	; 11
+ 1b4:	2f ef       	ldi	r18, 0xFF	; 255
+ 1b6:	3f e3       	ldi	r19, 0x3F	; 63
+ 1b8:	82 e0       	ldi	r24, 0x02	; 2
+ 1ba:	21 50       	subi	r18, 0x01	; 1
+ 1bc:	30 40       	sbci	r19, 0x00	; 0
+ 1be:	80 40       	sbci	r24, 0x00	; 0
+ 1c0:	e1 f7       	brne	.-8      	; 0x1ba <main+0x50>
+ 1c2:	00 c0       	rjmp	.+0      	; 0x1c4 <main+0x5a>
+ 1c4:	00 00       	nop
+  _delay_ms(200);
+ 
+  //Initialize command port
+  RFXX_PORT_INIT();
+ 1c6:	0e 94 53 00 	call	0xa6	; 0xa6 <RFXX_PORT_INIT>
+  //Initialize RF12 chip
+  RF12_INIT();
+ 1ca:	0e 94 75 00 	call	0xea	; 0xea <RF12_INIT>
+  //Init FIFO
+  RFXX_WRT_CMD(0xCA81);
+ 1ce:	81 e8       	ldi	r24, 0x81	; 129
+ 1d0:	9a ec       	ldi	r25, 0xCA	; 202
+ 1d2:	0e 94 5e 00 	call	0xbc	; 0xbc <RFXX_WRT_CMD>
+
+  while(1){
+    //Enable FIFO
+    RFXX_WRT_CMD(0xCA83);
+ 1d6:	83 e8       	ldi	r24, 0x83	; 131
+ 1d8:	9a ec       	ldi	r25, 0xCA	; 202
+ 1da:	0e 94 5e 00 	call	0xbc	; 0xbc <RFXX_WRT_CMD>
+ 1de:	c0 e1       	ldi	r28, 0x10	; 16
+    
+	
+	ChkSum=0;
+ 1e0:	d0 e0       	ldi	r29, 0x00	; 0
+    //Receive payload data
+    for(i=0;i<16;i++){
+      ChkSum+=RF12_RECV();
+ 1e2:	0e 94 aa 00 	call	0x154	; 0x154 <RF12_RECV>
+ 1e6:	d8 0f       	add	r29, r24
+ 1e8:	c1 50       	subi	r28, 0x01	; 1
+    RFXX_WRT_CMD(0xCA83);
+    
+	
+	ChkSum=0;
+    //Receive payload data
+    for(i=0;i<16;i++){
+ 1ea:	d9 f7       	brne	.-10     	; 0x1e2 <main+0x78>
+      ChkSum+=RF12_RECV();
+    }
+    //Receive Check sum
+    i=RF12_RECV();
+ 1ec:	0e 94 aa 00 	call	0x154	; 0x154 <RF12_RECV>
+ 1f0:	c8 2f       	mov	r28, r24
+    
+	
+	//Disable FIFO
+    RFXX_WRT_CMD(0xCA81);
+ 1f2:	81 e8       	ldi	r24, 0x81	; 129
+ 1f4:	9a ec       	ldi	r25, 0xCA	; 202
+ 1f6:	0e 94 5e 00 	call	0xbc	; 0xbc <RFXX_WRT_CMD>
+    	//Package chkeck
+    if(ChkSum==i){
+ 1fa:	cd 13       	cpse	r28, r29
+ 1fc:	ec cf       	rjmp	.-40     	; 0x1d6 <main+0x6c>
+      printf( "Data OK\n" );
+ 1fe:	8a e1       	ldi	r24, 0x1A	; 26
+ 200:	91 e0       	ldi	r25, 0x01	; 1
+ 202:	0e 94 44 01 	call	0x288	; 0x288 <puts>
+	  LED2_ON();
+ 206:	41 9a       	sbi	0x08, 1	; 8
+ 208:	9f ef       	ldi	r25, 0xFF	; 255
+ 20a:	2f e3       	ldi	r18, 0x3F	; 63
+ 20c:	32 e0       	ldi	r19, 0x02	; 2
+ 20e:	91 50       	subi	r25, 0x01	; 1
+ 210:	20 40       	sbci	r18, 0x00	; 0
+ 212:	30 40       	sbci	r19, 0x00	; 0
+ 214:	e1 f7       	brne	.-8      	; 0x20e <main+0xa4>
+ 216:	00 c0       	rjmp	.+0      	; 0x218 <main+0xae>
+ 218:	00 00       	nop
+      _delay_ms(200);
+      LED2_OFF();
+ 21a:	41 98       	cbi	0x08, 1	; 8
+ 21c:	dc cf       	rjmp	.-72     	; 0x1d6 <main+0x6c>
+
+0000021e <uart_putchar>:
+FILE uart_str = FDEV_SETUP_STREAM(uart_putchar, uart_getchar, _FDEV_SETUP_RW); 
+ 
+
+/* Baudy Comfort: Definition der Ausgabefunktion */
+int uart_putchar( char c, FILE* stream )
+{
+ 21e:	cf 93       	push	r28
+ 220:	c8 2f       	mov	r28, r24
+    if( c == '\n' )
+ 222:	8a 30       	cpi	r24, 0x0A	; 10
+ 224:	19 f4       	brne	.+6      	; 0x22c <uart_putchar+0xe>
+        uart_putchar( '\r', stream );
+ 226:	8d e0       	ldi	r24, 0x0D	; 13
+ 228:	0e 94 0f 01 	call	0x21e	; 0x21e <uart_putchar>
+ 
+    loop_until_bit_is_set( UCSR0A, UDRE0 );
+ 22c:	e0 ec       	ldi	r30, 0xC0	; 192
+ 22e:	f0 e0       	ldi	r31, 0x00	; 0
+ 230:	80 81       	ld	r24, Z
+ 232:	85 ff       	sbrs	r24, 5
+ 234:	fd cf       	rjmp	.-6      	; 0x230 <uart_putchar+0x12>
+    UDR0 = c;
+ 236:	c0 93 c6 00 	sts	0x00C6, r28	; 0x8000c6 <__DATA_REGION_ORIGIN__+0x66>
+    return 0;
+}
+ 23a:	80 e0       	ldi	r24, 0x00	; 0
+ 23c:	90 e0       	ldi	r25, 0x00	; 0
+ 23e:	cf 91       	pop	r28
+ 240:	08 95       	ret
+
+00000242 <uart_getchar>:
+
+/* Baudy Comfort: für Eingabe über scanf und umgeleitetem stdout */
+int uart_getchar(FILE *stream)
+{
+ 242:	cf 93       	push	r28
+ 244:	bc 01       	movw	r22, r24
+   unsigned char ch;    
+   while (!(UCSR0A & (1<<RXC0)));
+ 246:	e0 ec       	ldi	r30, 0xC0	; 192
+ 248:	f0 e0       	ldi	r31, 0x00	; 0
+ 24a:	90 81       	ld	r25, Z
+ 24c:	99 23       	and	r25, r25
+ 24e:	ec f7       	brge	.-6      	; 0x24a <uart_getchar+0x8>
+   ch=UDR0;  
+ 250:	c0 91 c6 00 	lds	r28, 0x00C6	; 0x8000c6 <__DATA_REGION_ORIGIN__+0x66>
+
+   /* Echo the output back to the terminal */
+   uart_putchar(ch,stream);      
+ 254:	8c 2f       	mov	r24, r28
+ 256:	0e 94 0f 01 	call	0x21e	; 0x21e <uart_putchar>
+
+   return ch;
+}
+ 25a:	8c 2f       	mov	r24, r28
+ 25c:	90 e0       	ldi	r25, 0x00	; 0
+ 25e:	cf 91       	pop	r28
+ 260:	08 95       	ret
+
+00000262 <USART_Init>:
+
+/* Initialisierung des USART (braucht man immer) */
+void USART_Init( unsigned int ubrr)
+{
+	/* Set baud rate */
+	UBRR0H = (unsigned char)(ubrr>>8);
+ 262:	90 93 c5 00 	sts	0x00C5, r25	; 0x8000c5 <__DATA_REGION_ORIGIN__+0x65>
+	UBRR0L = (unsigned char)ubrr;
+ 266:	80 93 c4 00 	sts	0x00C4, r24	; 0x8000c4 <__DATA_REGION_ORIGIN__+0x64>
+	/* Enable receiver and transmitter */
+	UCSR0B = (1<<RXEN0)|(1<<TXEN0);
+ 26a:	88 e1       	ldi	r24, 0x18	; 24
+ 26c:	80 93 c1 00 	sts	0x00C1, r24	; 0x8000c1 <__DATA_REGION_ORIGIN__+0x61>
+
+	UCSR0C = (1<<UCSZ01)|(1<<UCSZ00);  /* Asynchron 8N1 */
+ 270:	86 e0       	ldi	r24, 0x06	; 6
+ 272:	80 93 c2 00 	sts	0x00C2, r24	; 0x8000c2 <__DATA_REGION_ORIGIN__+0x62>
+	
+	stdout = stdin = &uart_str;
+ 276:	e2 e2       	ldi	r30, 0x22	; 34
+ 278:	f1 e0       	ldi	r31, 0x01	; 1
+ 27a:	80 e0       	ldi	r24, 0x00	; 0
+ 27c:	91 e0       	ldi	r25, 0x01	; 1
+ 27e:	91 83       	std	Z+1, r25	; 0x01
+ 280:	80 83       	st	Z, r24
+ 282:	93 83       	std	Z+3, r25	; 0x03
+ 284:	82 83       	std	Z+2, r24	; 0x02
+ 286:	08 95       	ret
+
+00000288 <puts>:
+ 288:	0f 93       	push	r16
+ 28a:	1f 93       	push	r17
+ 28c:	cf 93       	push	r28
+ 28e:	df 93       	push	r29
+ 290:	e0 91 24 01 	lds	r30, 0x0124	; 0x800124 <__data_end+0x2>
+ 294:	f0 91 25 01 	lds	r31, 0x0125	; 0x800125 <__data_end+0x3>
+ 298:	23 81       	ldd	r18, Z+3	; 0x03
+ 29a:	21 ff       	sbrs	r18, 1
+ 29c:	1b c0       	rjmp	.+54     	; 0x2d4 <puts+0x4c>
+ 29e:	8c 01       	movw	r16, r24
+ 2a0:	d0 e0       	ldi	r29, 0x00	; 0
+ 2a2:	c0 e0       	ldi	r28, 0x00	; 0
+ 2a4:	f8 01       	movw	r30, r16
+ 2a6:	81 91       	ld	r24, Z+
+ 2a8:	8f 01       	movw	r16, r30
+ 2aa:	60 91 24 01 	lds	r22, 0x0124	; 0x800124 <__data_end+0x2>
+ 2ae:	70 91 25 01 	lds	r23, 0x0125	; 0x800125 <__data_end+0x3>
+ 2b2:	db 01       	movw	r26, r22
+ 2b4:	18 96       	adiw	r26, 0x08	; 8
+ 2b6:	ed 91       	ld	r30, X+
+ 2b8:	fc 91       	ld	r31, X
+ 2ba:	19 97       	sbiw	r26, 0x09	; 9
+ 2bc:	88 23       	and	r24, r24
+ 2be:	31 f0       	breq	.+12     	; 0x2cc <puts+0x44>
+ 2c0:	09 95       	icall
+ 2c2:	89 2b       	or	r24, r25
+ 2c4:	79 f3       	breq	.-34     	; 0x2a4 <puts+0x1c>
+ 2c6:	df ef       	ldi	r29, 0xFF	; 255
+ 2c8:	cf ef       	ldi	r28, 0xFF	; 255
+ 2ca:	ec cf       	rjmp	.-40     	; 0x2a4 <puts+0x1c>
+ 2cc:	8a e0       	ldi	r24, 0x0A	; 10
+ 2ce:	09 95       	icall
+ 2d0:	89 2b       	or	r24, r25
+ 2d2:	19 f0       	breq	.+6      	; 0x2da <puts+0x52>
+ 2d4:	8f ef       	ldi	r24, 0xFF	; 255
+ 2d6:	9f ef       	ldi	r25, 0xFF	; 255
+ 2d8:	02 c0       	rjmp	.+4      	; 0x2de <puts+0x56>
+ 2da:	8d 2f       	mov	r24, r29
+ 2dc:	9c 2f       	mov	r25, r28
+ 2de:	df 91       	pop	r29
+ 2e0:	cf 91       	pop	r28
+ 2e2:	1f 91       	pop	r17
+ 2e4:	0f 91       	pop	r16
+ 2e6:	08 95       	ret
+
+000002e8 <_exit>:
+ 2e8:	f8 94       	cli
+
+000002ea <__stop_program>:
+ 2ea:	ff cf       	rjmp	.-2      	; 0x2ea <__stop_program>
