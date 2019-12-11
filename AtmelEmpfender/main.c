@@ -289,6 +289,7 @@ ISR (TIMER1_COMPA_vect)
 			case 27: a_gruen; counter=0;
 		}
 		} else {
+		counter = 20;
 		PORTC &= (0b00010); // Deaktiviere alle Lampen, bis auf die Gelbe
 		PORTC ^= (0b00010); // XOR auf der Gelben Lampe, damit sie im Sekunden
 	}
