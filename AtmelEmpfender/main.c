@@ -1,6 +1,6 @@
 
 /*
-* Abgabe Gruppe Scheibner, Pˆrrling, Phan
+* Abgabe Gruppe Scheibner, P√∂rrling, Phan
 *
 *
 * Created: 02.10.2011 15:01:10
@@ -10,7 +10,7 @@
 *  06.12.2019 Anpassung fuer Gruppenfrequenzen, dominic lukwata
 *
 *  10.12.2019 Erweiterung des Programmes zur Steuerung des Ampelprogrammes
-*  entsprechend dem 3. ‹bungsblatt
+*  entsprechend dem 3. √úbungsblatt
 *
 */
 
@@ -21,12 +21,12 @@ Prozessor: ATMEGA168a
 Frequenz: 433.05MHz
 Datenrate: 4.8kbps
 
-Dieses Programm enth‰lt eine Ampelsteuerung und eine Routine zum Empfang von Steuersignalen.
-‹ber die Steuersignale l‰sst sich die Ampel in die Modi 'an' und 'aus versetzen'.
+Dieses Programm enth√§lt eine Ampelsteuerung und eine Routine zum Empfang von Steuersignalen.
+√úber die Steuersignale l√§sst sich die Ampel in die Modi 'an' und 'aus versetzen'.
 
-Im 'an' Modus verh‰lt sich die Ampel so, wie schon im 2. ‹bungsblatt.
+Im 'an' Modus verh√§lt sich die Ampel so, wie schon im 2. √úbungsblatt.
 
-Empf‰ngt das Programm ein Steuersignal, um in dem Modus 'aus' versetzt zu werden, blinkt das Gelbe Licht der Ampel im Sekundentakt.
+Empf√§ngt das Programm ein Steuersignal, um in dem Modus 'aus' versetzt zu werden, blinkt das Gelbe Licht der Ampel im Sekundentakt.
 
 Pinbelegung
 -----------------------
@@ -233,7 +233,7 @@ int main(void)
 	
 	// Entspricht einer Sekunde bis Overflow bei Prescaler 1024
 	TCNT1 = -3600;
-	TCCR1B = (1<<CS10)|(1<<CS12); // Setze Prescaler f¸r Timer auf 1024
+	TCCR1B = (1<<CS10)|(1<<CS12); // Setze Prescaler f√ºr Timer auf 1024
 	
 	//Richtungsregister PORTC
 	DDRC |= (1<<DDC0)|(1<<DDC1)|(1<<DDC2)|(1<<DDC3)|(1<<DDC4);
@@ -241,14 +241,14 @@ int main(void)
 	
 	/* Konfiguriere Taster */
 
-	DDRD  &= ~(1 << DDD6);     // Lˆsche Belegung von PD2
-	PORTD |=  (1 << PD6);      // turn On the Pull-up
+	DDRD  &= ~(1 << DDD6);     // L√∂sche Belegung von PD6
+	PORTD |=  (1 << PD6);      // turn On the Pull-up on PD6
 	
 	// Pin Change Interrupt Control Register
 	PCICR |= (1 << PCIE2);     // Setze PCIE2 um PCMSK2 Scan zu aktivieren
 	
 	// Pin Change Mask Register 2
-	PCMSK2 = (1 << PCINT22);   //Aktiviere Interrupt auf PCINT18 (PIND2)
+	PCMSK2 = (1 << PCINT22);   //Aktiviere Interrupt auf PCINT22 (PIND6)
 	
 	// Global Interrupts aktivieren
 	sei();
