@@ -228,6 +228,10 @@ int main(void)
 		
 		if (a==0||a==1) //Nutzer wird aufgefordert eine 0 oder 1 einzugeben. Abweichende Eingaben werden Ignoriert
 		{
+			if (a==1)
+			{
+				a=0x0F;
+			}
 			
 			for (int i = 0; i < 3; i++)  //Um sicherzugehen, dass das Signal den Receiver erreicht wird es 3x verschickt
 			{
@@ -245,10 +249,10 @@ int main(void)
 				RF12_SEND(0xD4);//SYNC LOW BYTE
 				
 				
-				RF12_SEND(a);//DATA BYTE 0
-				ChkSum+= a;
-				RF12_SEND(id);//DATA BYTE 1
-				ChkSum+=id;
+				RF12_SEND(id);//DATA BYTE 0
+				ChkSum+= id;
+				RF12_SEND(a);//DATA BYTE 1
+				ChkSum+=a;
 				RF12_SEND(ChkSum); //send chk sum
 				
 				RF12_SEND(0xAA);//DUMMY BYTE

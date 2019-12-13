@@ -263,8 +263,8 @@ int main(void)
 		
 		
 		//Receive payload data
-		val = RF12_RECV();
 		id = RF12_RECV();
+		val = RF12_RECV();
 		//Receive Check sum
 		i=RF12_RECV();
 		
@@ -276,9 +276,15 @@ int main(void)
 		
 		printf("ID: %i val: %i", id, val);
 		
-		if(ChkSum==i && id == AMPELID && (val==0||val==1)){
-			ampelan = val;
-			printf( " Received Data Package OK, Data Code:%i",val);
+		if(ChkSum==i && id == AMPELID && (val==0||val==0x0F)){
+			if (val == 0x0F)
+			{
+				ampelan = 1;
+			} else if (val == 0)
+			{
+				ampelan = 0;
+			}
+			printf( " Received Data Package OK, Data Code: 0x0%X",val);
 			_delay_ms(10);
 		} else {
 			printf(" Discarded Package");
