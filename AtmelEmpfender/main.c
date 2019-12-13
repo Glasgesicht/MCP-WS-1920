@@ -228,8 +228,7 @@ int main(void)
 	
 	// Timer Interrupt Mask Register
 	// Overflow Interrupt erlauben
-	TIMSK1 |= (1<<OCIE1A);
-	TCCR1B = (1<<WGM12);
+	TIMSK1 |= (1<<TOIE1);
 	
 	// Entspricht einer Sekunde bis Overflow bei Prescaler 1024
 	TCNT1 = -3600;
@@ -293,7 +292,7 @@ int main(void)
 	}
 }
 
-ISR (TIMER1_COMPA_vect)
+ISR (TIMER1_OVF_vect)
 {
 	TCNT1 = -3600;   // for 1 sec // 3686400/1024 = 3600
 	
